@@ -837,12 +837,12 @@ func (c *ScrapeConfig) Validate(globalConfig GlobalConfig) error {
 		}
 	}
 
+	//nolint:staticcheck
+	if model.NameValidationScheme != model.UTF8Validation {
+		return errors.New("model.NameValidationScheme must be set to UTF8")
+	}
 	switch globalConfig.MetricNameValidationScheme {
-	case LegacyValidationConfig:
-	case "", UTF8ValidationConfig:
-		if model.NameValidationScheme != model.UTF8Validation {
-			panic("utf8 name validation requested but model.NameValidationScheme is not set to UTF8")
-		}
+	case "", LegacyValidationConfig, UTF8ValidationConfig:
 	default:
 		return fmt.Errorf("unknown name validation method specified, must be either 'legacy' or 'utf8', got %s", globalConfig.MetricNameValidationScheme)
 	}
@@ -1443,6 +1443,7 @@ type OTLPConfig struct {
 	PromoteResourceAttributes         []string                  `yaml:"promote_resource_attributes,omitempty"`
 	TranslationStrategy               translationStrategyOption `yaml:"translation_strategy,omitempty"`
 	KeepIdentifyingResourceAttributes bool                      `yaml:"keep_identifying_resource_attributes,omitempty"`
+	ConvertHistogramsToNHCB           bool                      `yaml:"convert_histograms_to_nhcb,omitempty"`
 }
 
 // UnmarshalYAML implements the yaml.Unmarshaler interface.

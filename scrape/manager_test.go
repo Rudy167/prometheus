@@ -40,10 +40,6 @@ import (
 	"google.golang.org/protobuf/types/known/timestamppb"
 	"gopkg.in/yaml.v2"
 
-	"github.com/prometheus/prometheus/storage"
-
-	"github.com/prometheus/prometheus/model/timestamp"
-
 	"github.com/prometheus/prometheus/config"
 	"github.com/prometheus/prometheus/discovery"
 	_ "github.com/prometheus/prometheus/discovery/file"
@@ -51,15 +47,12 @@ import (
 	"github.com/prometheus/prometheus/model/histogram"
 	"github.com/prometheus/prometheus/model/labels"
 	"github.com/prometheus/prometheus/model/relabel"
+	"github.com/prometheus/prometheus/model/timestamp"
+	"github.com/prometheus/prometheus/storage"
 	"github.com/prometheus/prometheus/tsdb/tsdbutil"
 	"github.com/prometheus/prometheus/util/runutil"
 	"github.com/prometheus/prometheus/util/testutil"
 )
-
-func init() {
-	// This can be removed when the default validation scheme in common is updated.
-	model.NameValidationScheme = model.UTF8Validation
-}
 
 func TestPopulateLabels(t *testing.T) {
 	cases := []struct {
